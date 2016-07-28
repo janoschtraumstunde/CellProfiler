@@ -65,7 +65,8 @@ class Image(object):
                  convert=True,
                  path_name=None,
                  file_name=None,
-                 scale=None):
+                 scale=None,
+                 dimensionality=None):
         self.__image = None
         self.__mask = None
         self.__has_mask = False
@@ -85,6 +86,7 @@ class Image(object):
         self.__file_name = file_name
         self.__path_name = path_name
         self.__channel_names = None
+        self.dimensionality = dimensionality
 
     def get_image(self):
         """Return the primary image"""
