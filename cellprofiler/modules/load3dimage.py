@@ -22,12 +22,17 @@ class Load3DImage(cellprofiler.module.Module):
 
     def create_settings(self):
         self.directory = cellprofiler.setting.DirectoryPath(
-            text = "Image directory:"
+            "Directory"
         )
 
         self.filename = cellprofiler.setting.FilenameText(
-            text = "Image filename:",
-            value = cellprofiler.setting.NONE
+            "Filename",
+            cellprofiler.setting.NONE
+        )
+
+        self.channel = cellprofiler.setting.Integer(
+            "Channel",
+            0
         )
 
         self.image_name = cellprofiler.setting.ImageNameProvider(
@@ -40,14 +45,16 @@ class Load3DImage(cellprofiler.module.Module):
         return [
             self.directory,
             self.filename,
-            self.image_name
+            self.image_name,
+            self.channel
         ]
 
     def visible_settings(self):
         return [
             self.directory,
             self.filename,
-            self.image_name
+            self.image_name,
+            self.channel
         ]
 
     def prepare_run(self, workspace):
@@ -64,20 +71,22 @@ class Load3DImage(cellprofiler.module.Module):
 
     def run(self, workspace):
         path = os.path.join(self.directory.get_absolute_path(), self.filename.value)
-        pixels = skimage.io.imread(path)[:, :, :, 1]
 
-        image = cellprofiler.image.Image(dimensionality=3)
+        channel = self.channel.value
 
-        image.pixel_data = pixels
+        name = self.image_name.value
 
-        workspace.image_set.add(self.image_name.value, image)
+        data = skimage.io.imread(path)[:, :, :, channel]
+
+        image = cellprofiler.image.Image(dimensions=3)
+
+        image.pixel_data = data
+
+        workspace.image_set.add(name, image)
 
         if self.show_window:
-            workspace.display_data.input_pixels = pixels
+            workspace.display_data.image = data
 
-    #
-    # display lets you use matplotlib to display your results.
-    #
     def display(self, workspace, figure):
         figure.set_subplots((1, 1))
 
@@ -85,5 +94,5 @@ class Load3DImage(cellprofiler.module.Module):
             0,
             0,
             workspace.display_data.input_pixels[0],
-            title=self.image_name.value
+            ""
         )
