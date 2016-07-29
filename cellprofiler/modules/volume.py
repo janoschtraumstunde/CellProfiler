@@ -8,7 +8,6 @@ import cellprofiler.image
 import cellprofiler.measurement
 import cellprofiler.module
 import cellprofiler.setting
-import matplotlib.pyplot
 import os.path
 import skimage.io
 
@@ -75,18 +74,18 @@ class Volume(cellprofiler.module.Module):
 
         name = self.name.value
 
-        data = skimage.io.imread(path)[:, :, :, channel]
+        x = skimage.io.imread(path)[:, :, :, channel]
 
         image = cellprofiler.image.Image(
             dimensions=3
         )
 
-        image.pixel_data = data
+        image.pixel_data = x
 
         workspace.image_set.add(name, image)
 
         if self.show_window:
-            workspace.display_data.image = data
+            workspace.display_data.image = x
 
     def display(self, workspace, figure):
         image = workspace.display_data.image[15]
