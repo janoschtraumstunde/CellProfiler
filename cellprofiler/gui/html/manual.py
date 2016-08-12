@@ -3,7 +3,6 @@ import cellprofiler.gui.help
 import cellprofiler.icons
 import cellprofiler.modules
 import cellprofiler.preferences
-import cellprofiler.utilities.version
 import glob
 import os
 import re
@@ -13,17 +12,17 @@ from shutil import copy
 
 import cellprofiler.icons
 import cellprofiler.preferences as cpprefs
-import cellprofiler.utilities.version as version
 from cellprofiler.gui.help import MAIN_HELP
 from cellprofiler.modules import get_module_names, instantiate_module
 import os.path
+import pkg_resources
 
 LOCATION_COVERPAGE = os.path.join('images', 'CPCoverPage.png')
 LOCATION_WHITEHEADLOGO = os.path.join('images', 'WhiteheadInstituteLogo.png')
 LOCATION_CSAILLOGO = os.path.join('images', 'CSAIL_Logo.png')
 LOCATION_IMAGINGPLATFORMBANNER = os.path.join('images', 'BroadPlusImagingPlusBanner.png')
-VERSION = cellprofiler.utilities.version.version_string
-VERSION_NUMBER = cellprofiler.utilities.version.version_number
+VERSION = pkg_resources.get_distribution("cellprofiler").version
+VERSION_NUMBER = pkg_resources.get_distribution("cellprofiler").version
 
 
 def generate_html(webpage_path=None):

@@ -21,12 +21,12 @@ import cellprofiler.icons
 import cellprofiler.modules
 import cellprofiler.pipeline
 import cellprofiler.preferences
-import cellprofiler.utilities.version
 import cellprofiler.workspace
 import inspect
 import logging
 import os
 import pdb
+import pkg_resources
 import sys
 import traceback
 import wx
@@ -472,7 +472,7 @@ class CPFrame(wx.Frame):
         wx.GetApp().ExitMainLoop()
 
     def __set_properties(self):
-        self.SetTitle("CellProfiler %s" % cellprofiler.utilities.version.title_string)
+        self.SetTitle("CellProfiler %s" % pkg_resources.get_distribution("cellprofiler").version)
         self.SetSize((1024, 600))
 
     def enable_edit_commands(self, ids):

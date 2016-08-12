@@ -69,6 +69,7 @@ import random
 import re
 import sys
 import traceback
+import pkg_resources
 
 logger = logging.getLogger(__name__)
 try:
@@ -3720,7 +3721,7 @@ check_tables = yes
         return result
 
     def write_workspace_file(self, workspace):
-        from cellprofiler.utilities.version import version_number
+        version_number = pkg_resources.get_distribution("cellprofiler").version
         '''If requested, write a workspace file with selected measurements'''
         if self.db_type == DB_SQLITE:
             name = os.path.splitext(self.sqlite_file.value)[0]

@@ -1,6 +1,7 @@
 # coding=utf-8
 import sys
 import wx
+import pkg_resources
 import cellprofiler.preferences
 import cellprofiler.gui.errordialog
 
@@ -21,9 +22,8 @@ class App(wx.App):
 
     def OnInit(self):
         import cellprofiler.gui.cpframe
-        import cellprofiler.utilities.version
 
-        self.SetAppName("CellProfiler{0:s}".format(cellprofiler.utilities.version.dotted_version))
+        self.SetAppName("CellProfiler{0:s}".format(pkg_resources.get_distribution("cellprofiler").version))
 
         self.frame = cellprofiler.gui.cpframe.CPFrame(None, -1, "Cell Profiler")
 

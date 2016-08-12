@@ -11,6 +11,8 @@ import traceback
 import urllib
 import urllib2
 
+import pkg_resources
+
 ED_STOP = "Stop"
 ED_CONTINUE = "Continue"
 ED_SKIP = "Skip"
@@ -288,7 +290,7 @@ def _display_error_dialog(frame, exc, pipeline, message=None, tb=None, continue_
 
 def on_report(event, dialog, traceback_text, pipeline):
     """Report an error to us"""
-    from cellprofiler.utilities.version import version_string
+    version_string = pkg_resources.get_distribution("cellprofiler").version
     params = {"traceback": traceback_text,
               "revision": version_string,
               "platform": str(platform.platform())

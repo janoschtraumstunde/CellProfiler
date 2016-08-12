@@ -13,6 +13,8 @@ import numpy as np
 import scipy
 import scipy.io.matlab
 
+import pkg_resources
+
 try:
     # implemented in scipy.io.matlab.miobase.py@5582
     from scipy.io.matlab.miobase import MatReadError
@@ -45,7 +47,6 @@ import cellprofiler.workspace as cpw
 import cellprofiler.setting as cps
 from cellprofiler.utilities.utf16encode import utf16encode, utf16decode
 from bioformats.omexml import OMEXML
-import cellprofiler.utilities.version as cpversion
 import javabridge as J
 
 '''The measurement name of the image number'''
@@ -945,7 +946,7 @@ class Pipeline(object):
 
         See savetxt for more comprehensive documentation.
         '''
-        from cellprofiler.utilities.version import version_number as cp_version_number
+        cp_version_number = pkg_resources.get_distribution("cellprofiler").version
         self.__modules = []
         self.caption_for_user = None
         self.message_for_user = None
@@ -1024,7 +1025,7 @@ class Pipeline(object):
 
         if CURRENT_VERSION is None:
             pass
-        elif git_hash is None or git_hash != cpversion.git_hash:
+        elif git_hash is None or git_hash != pkg_resources.get_distribution("cellprofiler").version.split(' ', 1)[1]:
             if pipeline_version > CURRENT_VERSION:
                 if git_hash is None:
                     message = (
@@ -1040,8 +1041,8 @@ class Pipeline(object):
                         'of CellProfiler (rev %s%s) but you are running '
                         'CellProfiler rev %s @ %s. Loading this pipeline may fail or '
                         'have unpredictable results.') % (
-                            git_hash, pipeline_date, cpversion.git_hash,
-                            cpversion.version_date.strftime("%c"))
+                            git_hash, pipeline_date, pkg_resources.get_distribution("cellprofiler").version.split(' ', 1)[1],
+                            pkg_resources.get_distribution("cellprofiler").version.strftime("%c"))
 
                 if cpprefs.get_headless():
                     logging.warning(message)
@@ -1267,7 +1268,7 @@ class Pipeline(object):
         are a collection of images and their metadata.
         See read_image_plane_details for the file format
         '''
-        from cellprofiler.utilities.version import version_number
+
         if hasattr(fd_or_filename, "write"):
             fd = fd_or_filename
             needs_close = False
@@ -1281,8 +1282,8 @@ class Pipeline(object):
 
         fd.write("%s\n" % COOKIE)
         fd.write("%s:%d\n" % (H_VERSION, NATIVE_VERSION))
-        fd.write("%s:%d\n" % (H_DATE_REVISION, version_number))
-        fd.write("%s:%s\n" % (H_GIT_HASH, cpversion.git_hash))
+        fd.write("%s:%d\n" % (H_DATE_REVISION, pkg_resources.get_distribution("cellprofiler").version))
+        fd.write("%s:%s\n" % (H_GIT_HASH, pkg_resources.get_distribution("cellprofiler").version.split(' ', 1)[1]))
         fd.write("%s:%d\n" % (H_MODULE_COUNT, len(self.__modules)))
         fd.write("%s:%s\n" % (H_HAS_IMAGE_PLANE_DETAILS, str(save_image_plane_details)))
         attributes = (
@@ -2121,7 +2122,7 @@ class Pipeline(object):
         '''
         assert isinstance(m, cpmeas.Measurements)
         self.write_pipeline_measurement(m)
-        m.add_experiment_measurement(M_VERSION, cpversion.version_string)
+        m.add_experiment_measurement(M_VERSION, pkg_resources.get_distribution("cellprofiler").version)
         m.add_experiment_measurement(M_TIMESTAMP,
                                      datetime.datetime.now().isoformat())
         m.flush()

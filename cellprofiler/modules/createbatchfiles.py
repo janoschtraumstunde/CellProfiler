@@ -42,7 +42,7 @@ import cellprofiler.setting as cps
 from cellprofiler.setting import YES, NO
 import cellprofiler.preferences as cpprefs
 import cellprofiler.workspace as cpw
-
+import pkg_resources
 from cellprofiler.measurement import F_BATCH_DATA, F_BATCH_DATA_H5
 
 '''# of settings aside from the mappings'''
@@ -266,7 +266,7 @@ class CreateBatchFiles(cpm.Module):
 
         if outf is not None, it is used as a file object destination.
         '''
-        from cellprofiler.utilities.version import version_number
+        version_number = pkg_resources.get_distribution("cellprofiler").version
 
         if outf is None:
             if self.wants_default_output_directory.value:
@@ -455,7 +455,7 @@ class CreateBatchFiles(cpm.Module):
                               setting_values[5:])
             variable_revision_number = 2
         if (not from_matlab) and variable_revision_number == 2:
-            from cellprofiler.utilities.version import version_number
+            version_number = pkg_resources.get_distribution("cellprofiler").version
 
             setting_values = (setting_values[:6] +
                               [version_number] +

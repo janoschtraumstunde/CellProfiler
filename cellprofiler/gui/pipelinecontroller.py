@@ -20,7 +20,6 @@ import cellprofiler.modules.loadimages
 import cellprofiler.object
 import cellprofiler.pipeline
 import cellprofiler.preferences
-import cellprofiler.utilities.version
 import cellprofiler.workspace
 import cpframe
 import cStringIO
@@ -33,6 +32,7 @@ import hashlib
 import logging
 import numpy
 import os
+import pkg_resources
 import Queue
 import random
 import re
@@ -1248,15 +1248,13 @@ class PipelineController(object):
         """Set the title of the parent frame"""
         pathname = cellprofiler.preferences.get_current_workspace_path()
         if pathname is None:
-            self.__frame.Title = "CellProfiler %s" % cellprofiler.utilities.version.title_string
+            self.__frame.Title = "CellProfiler %s" % pkg_resources.get_distribution("cellprofiler").version
             return
         path, filename = os.path.split(pathname)
         if self.__dirty_workspace:
-            self.__frame.Title = "CellProfiler %s: %s* (%s)" % (
-            cellprofiler.utilities.version.title_string, filename, path)
+            self.__frame.Title = "CellProfiler %s: %s* (%s)" % (pkg_resources.get_distribution("cellprofiler").version, filename, path)
         else:
-            self.__frame.Title = "CellProfiler %s: %s (%s)" % (
-            cellprofiler.utilities.version.title_string, filename, path)
+            self.__frame.Title = "CellProfiler %s: %s (%s)" % (pkg_resources.get_distribution("cellprofiler").version, filename, path)
 
     def __on_clear_pipeline(self, event):
         if wx.MessageBox("Do you really want to remove all modules from the pipeline?",

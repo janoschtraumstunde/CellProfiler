@@ -98,6 +98,8 @@ from cellprofiler.preferences import standardize_default_folder_names, \
 from cellprofiler.gui.help import USING_METADATA_GROUPING_HELP_REF
 from cellprofiler.gui.help import RETAINING_OUTLINES_HELP, NAMING_OUTLINES_HELP
 
+import pkg_resources
+
 OO_WITH_OVERLAP = "With overlap"
 OO_WITHOUT_OVERLAP = "Without overlap"
 OO_BOTH = "Both"
@@ -671,7 +673,7 @@ class UntangleWorms(cpm.Module):
     def post_group(self, workspace, grouping):
         '''Write the training data file as we finish grouping.'''
         if self.mode == MODE_TRAIN:
-            from cellprofiler.utilities.version import version_number
+            version_number = pkg_resources.get_distribution("cellprofiler").version
             worms = self.get_dictionary(workspace.image_set_list)[TRAINING_DATA]
             #
             # Either get weights from our instance or instantiate
